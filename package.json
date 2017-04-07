@@ -1,0 +1,30 @@
+{
+  "name": "led-matrix-art",
+  "version": "1.0.0",
+  "description": "A better web interface for the PIXEL Console App",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"No tests defined\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oliver-spryn/led-matrix-art.git"
+  },
+  "keywords": [
+    "raspberry-pi",
+    "iot",
+    "web",
+    "pixel-art"
+  ],
+  "author": "Oliver Spryn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oliver-spryn/led-matrix-art/issues"
+  },
+  "homepage": "https://github.com/oliver-spryn/led-matrix-art#readme",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "express": "^4.15.2"
+  }
+}
