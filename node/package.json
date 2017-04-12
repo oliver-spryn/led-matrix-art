@@ -24,7 +24,9 @@
   },
   "homepage": "https://github.com/oliver-spryn/led-matrix-art#readme",
   "dependencies": {
+    "body-parser": "^1.17.1",
     "child_process": "^1.0.2",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "jsonfile": "^2.4.0"
   }
 }
