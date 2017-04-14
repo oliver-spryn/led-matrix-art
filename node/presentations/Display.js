@@ -6,7 +6,7 @@ let _mode = 'gif';
 let _power = 0;
 let _write = false;
 
-module exports = class Display {
+module.exports = class Display {
 	constructor(mode) {
 		this.mode = mode;
 	}
@@ -25,7 +25,7 @@ module exports = class Display {
 			'superpixel'
 		];
 
-		if(!validMatrices.includes(newValue.toLowerCase()) {
+		if(!validMatrices.includes(newValue.toLowerCase())) {
 			throw 'Not a valid matrix';
 		}
 
@@ -38,7 +38,7 @@ module exports = class Display {
 			'gif'
 		];
 
-		if(!validModes.includes(newValue.toLowerCase()) {
+		if(!validModes.includes(newValue.toLowerCase())) {
 			throw 'Not a valid operating mode';
 		}
 
@@ -47,11 +47,16 @@ module exports = class Display {
 
 	get power() { return _power; }
 	set power(newValue) {
-		if(isNaN(newValue) || (!isNaN(newValue) && (newValue !== 0 || newValue !== 1))) {
+		let validPowerStates = [
+			0,
+			1
+		];
+
+		if(isNaN(newValue) || !validPowerStates.includes(parseInt(newValue))) {
 			throw 'Power may only be on [1] or off [0]';
 		}
 
-		_power = newValue;
+		_power = parseInt(newValue);
 	}
 
 	get write() { return _write; }
