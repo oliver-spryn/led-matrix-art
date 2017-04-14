@@ -38,9 +38,9 @@ module.exports = class GIF extends Display {
 		let pngPath = path.join(__dirname, '../../assets', newValue + '.png');
 
 		if(fs.existsSync(gifPath)) {
-			displayPath = gifPath;
+			displayPath = newValue + '.gif';
 		} else if (fs.existsSync(pngPath)) {
-			displayPath = pngPath;
+			displayPath = newValue + '.png';
 		} else {
 			throw 'The specified file does not exist';
 		}
@@ -59,13 +59,13 @@ module.exports = class GIF extends Display {
 	}
 
 	generateFlags() {
-		let params = super.generateFlags();
+		let params = [];
 
-		if(this.frameDelay != 0) params.push('--framedelay=' + this.frameDelay);
 		params.push('--gif=' + this.gif);
+		if(this.frameDelay != 0) params.push('--framedelay=' + this.frameDelay);
 		if(this.loop != 0) params.push('--loop=' + this.loop);
 
-		return params;
+		return params.concat(super.generateFlags());
 	}
 
 	deserialize(payload) {

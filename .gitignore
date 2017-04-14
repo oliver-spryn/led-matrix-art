@@ -1,3 +1,6 @@
+# Project cache folders
+java/decoded/*
+
 # Logs
 logs
 *.log

@@ -12,7 +12,9 @@ module.exports = class Display {
 	}
 
 	get daemon() { return _daemon; }
-	set daemon(newValue) { _daemon = !!newValue; }
+	set daemon(newValue) {
+		_daemon = newValue.toLowerCase() == 'true';
+	}
 
 	get matrix() { return _matrix; }
 	set matrix(newValue) {
@@ -60,14 +62,15 @@ module.exports = class Display {
 	}
 
 	get write() { return _write; }
-	set write(newValue) { _write = !!newValue; }
+	set write(newValue) {
+		_write = newValue.toLowerCase() == 'true';
+	}
 
 	generateFlags() {
 		let params = [];
 		
-		if(this.daemon) params.push('--daemon');
 		params.push('--' + this.matrix);
-		//Power state is determined by whether or not the Java driver is running
+		if(this.daemon) params.push('--daemon');
 		if(this.write) params.push('--write');
 
 		return params;
