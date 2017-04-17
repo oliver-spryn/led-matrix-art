@@ -15,6 +15,15 @@ app.use(parser.json());
 let proc = null;
 let state = new GIF('0fire');
 
+//Helper functions
+function generateFullCmd(flags) {
+	let gifPath = path.join(__dirname, '../java');
+	let jarPath = path.join(__dirname, '../java/pixelc.jar');
+
+	return 'cd ' + gifPath + ' && ' + 'sudo java -jar ' + jarPath + ' ' + flags;
+}
+
+//Routes
 app.get('/off', (req, res) => {
 });
 
@@ -29,18 +38,10 @@ app.get('/toggle', (req, res) => {
 app.put('/mode/gif', (req, res) => {
 	state.deserialize(req.body);
 
-	let flags = state.generateFlags();
-	let gifPath = path.join(__dirname, '../java');
-	let jarPath = path.join(__dirname, '../java/pixelc.jar');
-	flags = ['-jar', jarPath].concat(flags);
+	let cmd = generateFullCmd(state.generateFlags());
 
-	let cmd = 'cd ' + gifPath + ' && ' + 'sudo java ' + flags.join(' ');
-
-	console.log(cmd);
-	let child = exec(cmd);
+	proc = exec(cmd);
 	res.send(cmd);
 });
 
-app.listen(3000, () => {
-	console.log('Express server has started');
-});
+app.listen(80);

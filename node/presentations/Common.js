@@ -1,19 +1,23 @@
 'use strict';
 
-let _daemon = true;
-let _matrix = 'adafruit32x32';
-let _mode = 'gif';
-let _power = 0;
-let _write = false;
+let _daemon = null;
+let _matrix = null;
+let _mode = null;
+let _power = null;
+let _write = null;
 
-module.exports = class Display {
+module.exports = class Common {
 	constructor(mode) {
+		this.daemon = true;
+		this.matrix = 'adafruit32x32';
 		this.mode = mode;
+		this.power = 1;
+		this.write = false;
 	}
 
 	get daemon() { return _daemon; }
 	set daemon(newValue) {
-		_daemon = newValue.toLowerCase() == 'true';
+		_daemon = newValue == 'true';
 	}
 
 	get matrix() { return _matrix; }
@@ -63,15 +67,15 @@ module.exports = class Display {
 
 	get write() { return _write; }
 	set write(newValue) {
-		_write = newValue.toLowerCase() == 'true';
+		_write = newValue == 'true';
 	}
 
 	generateFlags() {
-		let params = [];
+		let params = '';
 		
-		params.push('--' + this.matrix);
-		if(this.daemon) params.push('--daemon');
-		if(this.write) params.push('--write');
+		params += (' --' + this.matrix);
+		if(this.daemon) params += ' --daemon';
+		if(this.write) params += ' --write';
 
 		return params;
 	}

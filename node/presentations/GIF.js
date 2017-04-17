@@ -1,18 +1,21 @@
 'use strict';
 
-let Display = require('./Display');
+let Common = require('./Common');
 let fs = require('fs');
 let path = require('path');
 
-let _frameDelay = 0;
-let _gif = '';
-let _loop = 0;
+let _frameDelay = null;
+let _gif = null;
+let _gifMetadata = null;
+let _loop = null;
 
-module.exports = class GIF extends Display {
+module.exports = class GIF extends Common {
 	constructor(gifAnimation) {
 		super('gif');
 
+		this.frameDelay = 0;
 		this.gif = gifAnimation;
+		this.loop = 0;
 	}
 
 	get frameDelay() { return _frameDelay; }
@@ -33,20 +36,39 @@ module.exports = class GIF extends Display {
 
 	get gif() { return _gif; }
 	set gif(newValue) {
-		let displayPath = null;
+		newValue = newValue.replace(/\.(gif|png)$/ig, '');
+
+		if(newValue.trim().length === 0) {
+			throw 'A GIF must be specified';
+		}
+
+		let displayName = null;
 		let gifPath = path.join(__dirname, '../../assets', newValue + '.gif');
 		let pngPath = path.join(__dirname, '../../assets', newValue + '.png');
+		_gifMetadata = {};
 
 		if(fs.existsSync(gifPath)) {
-			displayPath = newValue + '.gif';
+			displayName = newValue + '.gif';
+			_gifMetadata = {
+				baseName: newValue,
+				displayName: displayName,
+				type: 'gif'
+			};
 		} else if (fs.existsSync(pngPath)) {
-			displayPath = newValue + '.png';
+			displayName = newValue + '.png';
+			_gifMetadata = {
+				baseName: newValue,
+				displayName: displayName,
+				type: 'png'
+			};
 		} else {
 			throw 'The specified file does not exist';
 		}
 
-		_gif = displayPath;
+		_gif = displayName;
 	}
+
+	get gifMetadata() { return _gifMetadata; }
 
 	get loop() { return _loop; }
 	set loop(newValue) {
@@ -59,13 +81,14 @@ module.exports = class GIF extends Display {
 	}
 
 	generateFlags() {
-		let params = [];
+		let params = '';
 
-		params.push('--gif=' + this.gif);
-		if(this.frameDelay != 0) params.push('--framedelay=' + this.frameDelay);
-		if(this.loop != 0) params.push('--loop=' + this.loop);
+		params += (' --gif=' + this.gif);
+		if(this.frameDelay != 0) params += (' --framedelay=' + this.frameDelay);
+		if(this.loop != 0) params += (' --loop=' + this.loop);
+		params += super.generateFlags();
 
-		return params.concat(super.generateFlags());
+		return params;
 	}
 
 	deserialize(payload) {
