@@ -17,7 +17,7 @@ module.exports = class Common {
 
 	get daemon() { return _daemon; }
 	set daemon(newValue) {
-		_daemon = newValue == 'true';
+		_daemon = newValue == 'true' || newValue;
 	}
 
 	get matrix() { return _matrix; }
@@ -67,7 +67,7 @@ module.exports = class Common {
 
 	get write() { return _write; }
 	set write(newValue) {
-		_write = newValue == 'true';
+		_write = newValue == 'true' || newValue;
 	}
 
 	generateFlags() {
@@ -81,21 +81,13 @@ module.exports = class Common {
 	}
 
 	deserialize(payload) {
-		if(!payload ||
-		!payload.hasOwnProperty('common') ||
-		!payload.common.hasOwnProperty('daemon') ||
-		!payload.common.hasOwnProperty('matrix') ||
-		!payload.common.hasOwnProperty('mode') ||
-		!payload.common.hasOwnProperty('power') ||
-		!payload.common.hasOwnProperty('write')) {
-			throw 'The payload is malformed';
-		}
+		if(!payload || !payload.hasOwnProperty('common')) return;
 
-		this.daemon = payload.common.daemon;
-		this.matrix = payload.common.matrix;
-		this.mode = payload.common.mode;
-		this.power = payload.common.power;
-		this.write = payload.common.write;
+		if(payload.common.hasOwnProperty('daemon')) this.daemon = payload.common.daemon;
+		if(payload.common.hasOwnProperty('matrix')) this.matrix = payload.common.matrix;
+		if(payload.common.hasOwnProperty('mode')) this.mode = payload.common.mode;
+		if(payload.common.hasOwnProperty('power')) this.power = payload.common.power;
+		if(payload.common.hasOwnProperty('write')) this.write = payload.common.write;
 	}
 
 	serialize() {

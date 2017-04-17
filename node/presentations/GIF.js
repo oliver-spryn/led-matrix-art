@@ -94,17 +94,16 @@ module.exports = class GIF extends Common {
 	deserialize(payload) {
 		super.deserialize(payload);
 
-		if(!payload ||
-		!payload.hasOwnProperty('gif') ||
-		!payload.gif.hasOwnProperty('frameDelay') ||
-		!payload.gif.hasOwnProperty('gif') ||
-		!payload.gif.hasOwnProperty('loop')) {
-			throw 'The payload is malformed';
-		}
+		if(!payload || !payload.hasOwnProperty('gif')) return;
 
-		this.frameDelay = payload.gif.frameDelay;
-		this.gif = payload.gif.gif;
-		this.loop = payload.gif.loop;
+		if(payload.gif.hasOwnProperty('frameDelay')) this.frameDelay = payload.gif.frameDelay;
+		if(payload.gif.hasOwnProperty('loop')) this.loop = payload.gif.loop;
+
+		if(payload.gif.hasOwnProperty('gif')){
+			this.gif = payload.gif.gif;
+		} else {
+			throw 'A GIF must be specified';
+		}
 	}
 
 	serialize() {
